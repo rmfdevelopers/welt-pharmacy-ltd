@@ -3,7 +3,7 @@ import './globals.css';
 
 const heading = Space_Grotesk({ 
   subsets: ['latin'], 
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['300', '400', '500', '600', '700'], 
   variable: '--font-heading' 
 });
 
@@ -13,14 +13,14 @@ const body = Inter({
 });
 
 export const metadata = {
-  title: 'Welt Pharmacy Ltd | Vanguard of Healthy Living',
-  description: 'Premier 24-hour healthcare provider specializing in rare drug sourcing, vaccines, and advanced pharmaceutical care.',
+  title: 'Welt Pharmacy Ltd | The Vanguard of Healthy Living',
+  description: 'Port Harcourt\'s premier 24-hour healthcare hub specializing in rare drug sourcing, vaccines, and advanced laboratory services.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${heading.variable} ${body.variable} font-sans antialiased`}>
+    <html lang="en">
+      <body className={`${heading.variable} ${body.variable} font-sans`}>
         {children}
       </body>
     </html>

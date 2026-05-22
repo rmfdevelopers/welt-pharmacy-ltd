@@ -2,10 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@theme {
+  --color-primary: #4B0082;
+  --color-secondary: #FDFBFF;
+  --color-accent: #9370DB;
+  --color-neutral-dark: #FFFFFF;
+  --color-neutral: #A1A1AA;
+  --color-neutral-light: #27272A;
+}
+
 :root {
-  --primary: #050505;
-  --secondary: #7B68EE;
-  --accent: #E6E6FA;
+  --primary: #4B0082;
+  --secondary: #FDFBFF;
+  --accent: #9370DB;
 }
 
 html { scroll-behavior: smooth; }
@@ -15,6 +24,7 @@ body {
   background: var(--primary); 
   color: white; 
 }
+
 h1, h2, h3, h4 { font-family: var(--font-heading); }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -29,11 +39,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); }
 .animate-float { animation: float 6s ease-in-out infinite; }
 .animate-slide-left { animation: slide-left 40s linear infinite; }
 
+.line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 .scrollbar-hide::-webkit-scrollbar { display: none; }
-
-.glass-panel {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
