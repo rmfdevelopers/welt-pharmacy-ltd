@@ -3,7 +3,7 @@ import './globals.css';
 
 const heading = Space_Grotesk({ 
   subsets: ['latin'], 
-  weight: ['400', '700'], 
+  weight: ['300', '400', '500', '600', '700'],
   variable: '--font-heading' 
 });
 
@@ -13,8 +13,8 @@ const body = Inter({
 });
 
 export const metadata = {
-  title: 'Welt Pharmacy Ltd | The Vanguard of Healthy Living',
-  description: 'Premier 24-hour pharmaceutical hub specializing in rare drug sourcing, vaccines, and advanced laboratory services in Port Harcourt.',
+  title: 'Welt Pharmacy Ltd | Vanguard of Healthy Living',
+  description: 'Premier 24-hour healthcare provider specializing in rare drug sourcing, vaccines, and advanced pharmaceutical care.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

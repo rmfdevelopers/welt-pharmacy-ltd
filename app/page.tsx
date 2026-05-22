@@ -3,37 +3,44 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { 
-  Clock, 
-  Search, 
-  Truck, 
-  Microscope, 
-  ArrowRight, 
-  Phone, 
-  Mail, 
-  MapPin, 
-  CheckCheck, 
-  Loader2, 
-  ImageOff,
-  Menu,
-  X,
-  Activity,
-  Users,
-  Heart,
-  ChevronRight,
-  ShieldCheck,
-  Stethoscope
+  Clock, Search, Activity, Truck, Phone, Mail, MapPin, 
+  CheckCheck, ArrowRight, Loader2, Menu, X, Microscope, 
+  FlaskConical, ShieldCheck, HeartPulse, ImageOff, Users, Heart 
 } from 'lucide-react';
 
 // DESIGN DECISIONS:
-// Layout Energy: editorial
+// Layout Energy: dense
 // Depth Treatment: glassmorphic
 // Divider Style: D-STAT
-// Typography Personality: refined
+// Typography Personality: oversized
 
-// --- Hooks ---
+// ===== COMPONENTS =====
 
-const useScrollReveal = (threshold = 0.15) => {
-  const ref = useRef<HTMLElement>(null);
+function SafeImage({ src, alt, fill, width, height, className, priority }: any) {
+  const [error, setError] = useState(false);
+  if (error) {
+    return (
+      <div className={`flex items-center justify-center bg-zinc-900 ${className}`}>
+        <ImageOff size={24} className="text-zinc-700" />
+      </div>
+    );
+  }
+  return (
+    <Image 
+      src={src} 
+      alt={alt} 
+      fill={fill} 
+      width={!fill ? width : undefined} 
+      height={!fill ? height : undefined} 
+      className={className} 
+      priority={priority}
+      onError={() => setError(true)}
+    />
+  );
+}
+
+const useScrollReveal = (threshold = 0.1) => {
+  const ref = useRef<any>(null);
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -46,296 +53,237 @@ const useScrollReveal = (threshold = 0.15) => {
   return { ref, isVisible };
 };
 
-// --- Components ---
-
-function SafeImage({ src, alt, fill, width, height, className, priority, fallbackClassName }: {
-  src: string; alt: string; fill?: boolean; width?: number; height?: number;
-  className?: string; priority?: boolean; fallbackClassName?: string;
-}) {
-  const [error, setError] = useState(false);
-  if (error) {
-    return (
-      <div className={`flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/40 ${fallbackClassName ?? className ?? ''}`}>
-        <ImageOff size={28} className="text-white/20" />
-      </div>
-    );
-  }
-  return (
-    <Image src={src} alt={alt} fill={fill}
-      width={!fill ? (width ?? 800) : undefined}
-      height={!fill ? (height ?? 600) : undefined}
-      className={className} priority={priority}
-      onError={() => setError(true)} />
-  );
-}
-
-const BRIEF = {
-  brand: {
-    name: "Welt Pharmacy Ltd",
-    tagline: "The Vanguard of Healthy Living",
-    description: "A premier 24-hour pharmaceutical hub specializing in rare drug sourcing, vaccines, and advanced laboratory services in Port Harcourt.",
-    industry: "Pharmaceutical Services",
-    region: "nigeria"
-  },
-  contact: {
-    whatsapp: "2349016000413",
-    instagram: "@weltpharma",
-    email: "info@weltpharma.com",
-    address: "236 Aba Expressway, beside Tantalizer fast food, Bori Camp, Rumuola Port Harcourt, Rivers State"
-  },
-  colors: {
-    primary: "#9932CC",
-    secondary: "#E6E6FA",
-    accent: "#000000"
-  },
-  products: [
-    { name: "Rare Drug Sourcing Service", description: "Expert procurement of hard-to-find specialty medications through our global network.", price: "₦150,000", image: "https://images.unsplash.com/photo-1628771065518-0d82f1938462" },
-    { name: "Dermatological Care Kit", description: "Premium skincare regimen curated for specific clinical skin requirements.", price: "₦45,000", image: "https://images.unsplash.com/photo-1691187861257-a56c4aa2d7fb" },
-    { name: "Comprehensive Vaccine Package", description: "Full immunization schedule for adults and children in a controlled clinical setting.", price: "₦25,000", image: "https://images.unsplash.com/photo-1579165466741-7f35e4755660" },
-    { name: "Premium Multivitamin Bundle", description: "High-potency daily supplements for immune support and long-term vitality.", price: "₦12,500", image: "https://images.unsplash.com/photo-1706111577646-d4c00471fa72" }
-  ],
-  features: [
-    { title: "24/7 Pharmaceutical Access", description: "Round-the-clock availability for emergency medications and urgent care needs.", icon: <Clock size={24} /> },
-    { title: "Advanced Lab Services", description: "State-of-the-art diagnostic testing and clinical laboratory evaluations.", icon: <Microscope size={24} /> },
-    { title: "Rare Drug Procurement", description: "The vanguard of sourcing specialized medications not found in standard retail.", icon: <Search size={24} /> },
-    { title: "Statewide Delivery", description: "Fast and temperature-controlled delivery across Port Harcourt and beyond.", icon: <Truck size={24} /> }
-  ],
-  stats: [
-    { number: "200+", label: "Satisfied Clients", icon: <Users size={20} /> },
-    { number: "3.5k+", label: "Health Community", icon: <Heart size={20} /> },
-    { number: "24/7", label: "Clinical Support", icon: <Activity size={20} /> }
-  ],
-  testimonials: [
-    { name: "Dr. Chidi Okoro", text: "Rapid delivery of rare drugs when nobody else had stock. Their sourcing network is unparalleled.", role: "Medical Practitioner" },
-    { name: "Amaka Williams", text: "Their skincare consultation transformed my routine. Highly professional and knowledgeable staff.", role: "Client" },
-    { name: "Tunde Bakare", text: "Best 24-hour service in Rumuola. Reliable, trustworthy, and always well-stocked.", role: "Patient" }
-  ],
-  process: [
-    { number: "01", title: "Consultation", description: "Present your prescription or clinical requirement to our specialist pharmacists." },
-    { number: "02", title: "Global Search", description: "We activate our vanguard network to locate specialized medications internationally." },
-    { number: "03", title: "Clinical Verification", description: "Every sourced item undergoes rigorous quality and authenticity verification." },
-    { number: "04", title: "Secure Delivery", description: "Temperature-controlled distribution to your doorstep or our Port Harcourt hub." }
-  ]
+const useTypewriter = (text: string, speed = 50) => {
+  const [display, setDisplay] = useState('');
+  useEffect(() => {
+    let i = 0;
+    const timer = setInterval(() => {
+      if (i < text.length) { setDisplay(prev => prev + text.charAt(i)); i++; }
+      else clearInterval(timer);
+    }, speed);
+    return () => clearInterval(timer);
+  }, [text, speed]);
+  return display;
 };
 
-export default function Page() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+// ===== DATA =====
 
+const brand = {
+  name: "Welt Pharmacy Ltd",
+  tagline: "Vanguard of Healthy Living",
+  description: "A premier 24-hour healthcare provider specializing in rare drug sourcing, vaccines, and advanced pharmaceutical care.",
+  industry: "Health",
+  region: "Nigeria"
+};
+
+const contact = {
+  whatsapp: "2349016000413",
+  address: "236 Aba Expressway, beside Tantalizer, Bori Camp, Rumuola, Port Harcourt",
+  instagram: "weltpharma"
+};
+
+const stats = [
+  { number: "200+", label: "Satisfied Clients", icon: Users },
+  { number: "3.5k+", label: "Social Followers", icon: Heart },
+  { number: "24/7", label: "Pharmacy Access", icon: ShieldCheck },
+  { number: "100%", label: "Drug Authenticity", icon: CheckCheck }
+];
+
+const features = [
+  { title: "24/7 Availability", description: "Round-the-clock access to critical medication and professional advice.", icon: Clock },
+  { title: "Rare Drug Sourcing", description: "Expert network for procuring specialized medicine globally.", icon: Search },
+  { title: "Lab Services", description: "On-site clinical laboratory for accurate and swift diagnostics.", icon: Activity },
+  { title: "Express Delivery", description: "Swift and secure door-to-door delivery for all prescriptions.", icon: Truck }
+];
+
+const products = [
+  { name: "Immune Boost Vitamin Pack", description: "High-potency essential vitamins for daily vitality and defense.", price: "₦12,500", img: "https://images.unsplash.com/photo-1777307275337-342e5ca9732a?q=80&w=1080" },
+  { name: "Derm-Care Luxury Set", description: "Advanced skin restoration and hydration kit for sensitive skin.", price: "₦45,000", img: "https://images.unsplash.com/photo-1669707040789-b39a52afb84c?q=80&w=1080" },
+  { name: "Rare Drug Sourcing Service", description: "Global procurement of specialized and hard-to-find medications.", price: "₦180,000", img: "https://images.unsplash.com/photo-1582719366950-f23838e207e7?q=80&w=1080" },
+  { name: "Premium Wellness Checkup", description: "Comprehensive laboratory screening and pharmaceutical consultation.", price: "₦35,000", img: "https://images.unsplash.com/photo-1766299892549-b56b257d1ddd?q=80&w=1080" }
+];
+
+const gallery = [
+  "https://images.unsplash.com/photo-1669101283516-e608dcf142df",
+  "https://images.unsplash.com/photo-1669101283142-a61e26f8c352",
+  "https://images.unsplash.com/photo-1669707040789-b39a52afb84c",
+  "https://images.unsplash.com/photo-1663365520153-0124d0e7cf98",
+  "https://images.unsplash.com/photo-1732690233982-1d4567384ea1"
+];
+
+const testimonials = [
+  { name: "Chinedu Okoro", text: "They found a rare medication for my father when no one else in the city could. Truly life-savers.", role: "Regular Customer" },
+  { name: "Amaka Eze", text: "The 24-hour service is a relief. Their skincare recommendations have completely transformed my routine.", role: "Skincare Client" },
+  { name: "Tunde Williams", text: "Professional lab services and very fast results. The staff is knowledgeable and very courteous.", role: "Lab Patient" }
+];
+
+// ===== SECTIONS =====
+
+const Navbar = () => {
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <main className="relative">
-      <Header scrolled={scrolled} isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-      <Hero />
-      <DStat />
-      <Features />
-      <Process />
-      <Products />
-      <About />
-      <Testimonials />
-      <Contact />
-      <Footer />
-    </main>
-  );
-}
-
-function Header({ scrolled, isMenuOpen, setIsMenuOpen }: any) {
-  return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-accent/90 backdrop-blur-xl border-b border-white/10 py-4' : 'bg-transparent py-6'}`}>
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-primary flex items-center justify-center rounded-lg font-black text-white text-xl">W</div>
-          <span className="font-heading font-bold text-white text-xl tracking-tight uppercase hidden sm:block">Welt Pharma</span>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-black/90 backdrop-blur-xl border-b border-white/10 py-4' : 'bg-transparent py-6'}`}>
+      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-secondary flex items-center justify-center rounded-lg font-black text-black">W</div>
+          <span className="font-heading font-black text-xl tracking-tighter uppercase">Welt Pharma</span>
         </div>
-
-        <div className="hidden md:flex items-center gap-10">
-          {['Home', 'Services', 'Products', 'Contact'].map((link) => (
-            <a key={link} href={`#${link.toLowerCase()}`} className="text-white/70 hover:text-primary font-medium text-sm tracking-widest uppercase transition-colors">
-              {link}
-            </a>
+        <div className="hidden md:flex items-center gap-8">
+          {['Services', 'Pharmacy Store', 'About Us', 'Contact'].map(link => (
+            <a key={link} href={`#${link.toLowerCase().replace(' ', '-')}`} className="text-sm font-medium text-white/60 hover:text-white transition-colors">{link}</a>
           ))}
-          <a href="#contact" className="bg-primary text-white px-6 py-2.5 rounded-full font-bold text-xs tracking-widest uppercase hover:brightness-110 transition-all">
-            Speak to a Pharmacist
-          </a>
+          <a href="#contact" className="bg-secondary text-black px-6 py-2.5 rounded-full font-bold text-sm hover:brightness-110 transition-all">Get Started</a>
         </div>
-
-        <button className="md:hidden text-white" onClick={() => setIsMenuOpen(true)}>
-          <Menu size={28} />
-        </button>
+        <button onClick={() => setMobileOpen(true)} className="md:hidden text-white"><Menu /></button>
       </div>
-
-      {/* Mobile Menu */}
-      <div className={`fixed inset-0 z-[60] bg-primary transition-transform duration-500 ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
-        <div className="p-6 flex flex-col h-full">
-          <div className="flex justify-between items-center mb-16">
-            <div className="w-10 h-10 bg-black flex items-center justify-center rounded-lg font-black text-white text-xl">W</div>
-            <button onClick={() => setIsMenuOpen(false)}><X size={32} className="text-white" /></button>
-          </div>
-          <div className="flex flex-col gap-8">
-            {['Home', 'Services', 'Products', 'Contact'].map((link) => (
-              <a key={link} href={`#${link.toLowerCase()}`} onClick={() => setIsMenuOpen(false)} className="text-white text-4xl font-heading font-black italic uppercase">
-                {link}
-              </a>
+      {/* Mobile Sidebar */}
+      <div className={`fixed inset-0 z-[60] transition-transform duration-500 ${mobileOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-md" onClick={() => setMobileOpen(false)} />
+        <div className="absolute right-0 top-0 h-full w-[80%] max-w-sm bg-[#0a0a0a] border-l border-white/10 p-10 flex flex-col">
+          <button onClick={() => setMobileOpen(false)} className="self-end mb-12 text-white/40"><X size={32} /></button>
+          <div className="space-y-8">
+            {['Services', 'Pharmacy Store', 'About Us', 'Contact'].map(link => (
+              <a key={link} onClick={() => setMobileOpen(false)} href={`#${link.toLowerCase().replace(' ', '-')}`} className="block text-3xl font-heading font-bold">{link}</a>
             ))}
           </div>
-          <div className="mt-auto border-t border-white/20 pt-8">
-            <p className="text-white/60 text-sm mb-4">{BRIEF.contact.address}</p>
-            <p className="text-white font-bold">{BRIEF.contact.whatsapp}</p>
+          <div className="mt-auto">
+            <a href="#contact" onClick={() => setMobileOpen(false)} className="w-full block bg-secondary text-black text-center py-4 rounded-xl font-bold">Contact Specialist</a>
           </div>
         </div>
       </div>
     </nav>
   );
-}
+};
 
-function Hero() {
+const Hero = () => {
   const { ref, isVisible } = useScrollReveal();
+  const typedText = useTypewriter("Securing Your Health, Day and Night.");
   
   return (
-    <section id="home" className="min-h-screen relative flex items-end pb-32 px-6 md:px-16 overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <SafeImage 
-          src="https://images.unsplash.com/photo-1507679799987-c73779587ccf" 
-          alt="Welt Pharmacy Vanguard" 
-          fill 
-          className="object-cover" 
-          priority 
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent" />
+    <section ref={ref} id="home" className="min-h-screen flex flex-col justify-center bg-black px-6 overflow-hidden relative pt-20">
+      <div className="absolute inset-0 opacity-30 grayscale pointer-events-none">
+         <SafeImage src="https://images.unsplash.com/photo-1681418290255-a5355089dc6d" alt="Pharmacy Interior" fill className="object-cover" priority />
       </div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(123,104,238,0.15),transparent_70%)]" />
 
-      <div ref={ref} className={`relative z-10 max-w-4xl transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
-        <h1 className="font-heading text-6xl md:text-[7rem] font-black text-white leading-[0.85] tracking-tighter uppercase italic">
-          Modern Healthcare <br /> At Your <span className="text-primary">Fingertips.</span>
+      <div className="relative z-10 max-w-6xl mx-auto w-full">
+        <h1 className={`font-heading text-[12vw] md:text-[8vw] font-black text-white leading-[0.85] tracking-tighter uppercase italic transition-all duration-1000 ${isVisible ? 'opacity-100 skew-y-0 translate-y-0' : 'opacity-0 skew-y-2 translate-y-8'}`}>
+          {typedText}<span className="text-secondary animate-pulse">_</span>
         </h1>
-        <p className="text-white/60 mt-8 text-xl max-w-xl leading-relaxed font-light">
-          {BRIEF.brand.description}
-        </p>
-        <div className="flex flex-wrap gap-6 mt-12">
-          <a href="#contact" className="bg-primary text-white px-10 py-5 font-black text-lg uppercase tracking-tighter hover:scale-105 transition-all rounded-sm flex items-center gap-3">
-            Speak to a Pharmacist <ArrowRight size={20} />
+        <div className={`mt-10 flex flex-col md:flex-row items-start md:items-end justify-between gap-8 border-t border-white/10 pt-10 transition-all duration-1000 delay-500 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          <p className="text-white/40 text-lg max-w-sm leading-relaxed">
+            Expert pharmaceutical care, rare drug sourcing, and clinical laboratory services in the heart of Port Harcourt.
+          </p>
+          <a href="#contact" className="bg-secondary text-black px-12 py-5 rounded-full font-black text-lg shadow-[8px_8px_0px_rgba(255,255,255,0.1)] hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[3px_3px_0px_rgba(255,255,255,0.1)] transition-all shrink-0">
+            Order via WhatsApp
           </a>
-          <div className="flex items-center gap-4 text-white/40">
-            <div className="w-12 h-px bg-white/20" />
-            <span className="text-xs uppercase tracking-[0.4em] font-bold">Est. Port Harcourt</span>
-          </div>
         </div>
       </div>
     </section>
   );
-}
+};
 
-function DStat() {
+const Features = () => {
+  const { ref, isVisible } = useScrollReveal();
+  const IconMap: any = { Clock, Search, Activity, Truck };
+
+  return (
+    <section ref={ref} id="services" className="py-28 bg-[#050505] px-6">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-20">
+          <h2 className="font-heading text-5xl md:text-7xl font-black text-white leading-none">Comprehensive Care</h2>
+          <p className="text-white/30 text-xl mt-4 font-medium uppercase tracking-[0.2em]">Clinical Precision</p>
+        </div>
+        <div className="space-y-4">
+          {features.map((f, idx) => {
+            const Icon = IconMap[f.icon] || ShieldCheck;
+            return (
+              <div key={idx} className="sticky group" style={{ top: `${100 + idx * 30}px` }}>
+                <div className="bg-[#0f0f0f] rounded-[2.5rem] p-10 border border-white/5 shadow-2xl flex flex-col md:flex-row items-start md:items-center gap-10">
+                  <div className="w-20 h-20 rounded-3xl bg-secondary/10 flex items-center justify-center shrink-0 group-hover:bg-secondary transition-all duration-500 group-hover:scale-110">
+                    <Icon className="text-secondary group-hover:text-black transition-colors" size={36} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-heading text-3xl font-bold text-white uppercase tracking-tight">{f.title}</h3>
+                      <span className="text-white/10 font-mono text-xl">/ 0{idx + 1}</span>
+                    </div>
+                    <p className="text-white/50 text-lg leading-relaxed">{f.description}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const DividerStats = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <div ref={ref} className="bg-primary py-16">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-black/10 text-center">
-        {BRIEF.stats.map((s, i) => (
-          <div key={i} className={`px-8 py-8 md:py-4 transition-all duration-1000 delay-${i * 200} ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`}>
-            <div className="flex justify-center mb-4 text-black/40">
-              {s.icon}
-            </div>
+    <div ref={ref} className="bg-secondary py-16">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-12 text-center px-6">
+        {stats.map((s, i) => (
+          <div key={i} className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`} style={{ transitionDelay: `${i * 150}ms` }}>
             <p className="text-5xl font-black text-black tracking-tighter">{s.number}</p>
-            <p className="text-black/60 text-sm mt-2 font-bold uppercase tracking-widest">{s.label}</p>
+            <p className="text-black/60 text-sm mt-1 font-bold uppercase tracking-widest">{s.label}</p>
           </div>
         ))}
       </div>
     </div>
   );
-}
+};
 
-function Features() {
+const GalleryMasonry = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section id="services" ref={ref} className="py-28 px-6 bg-accent">
+    <section ref={ref} className="py-28 px-6 bg-[#0a0a0a]">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
-          <div>
-            <span className="text-primary font-mono text-xs tracking-[0.5em] uppercase mb-4 block">Our Excellence</span>
-            <h2 className="font-heading text-5xl md:text-6xl font-black text-white leading-none uppercase">Clinical Services</h2>
-          </div>
-          <p className="text-white/40 max-w-sm text-lg">Why healthcare professionals and families in Rivers State choose Welt Pharmacy.</p>
-        </div>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {BRIEF.features.map((f, i) => (
-            <div key={i} 
-              style={{ transitionDelay: `${i * 120}ms` }}
-              className={`p-10 rounded-3xl border border-white/5 bg-white/5 hover:bg-primary/10 hover:border-primary/30 transition-all duration-500 group relative overflow-hidden ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
-              <div className="mb-8 text-primary group-hover:scale-110 transition-transform">{f.icon}</div>
-              <h3 className="font-heading font-bold text-white text-2xl leading-tight mb-4 uppercase tracking-tighter">{f.title}</h3>
-              <p className="text-white/40 text-sm leading-relaxed group-hover:text-white/60 transition-colors">{f.description}</p>
+        <h2 className="font-heading text-5xl font-black text-white mb-14 text-center">Our Clinical Space</h2>
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-6 space-y-6">
+          {gallery.map((src, i) => (
+            <div key={i} className={`break-inside-avoid group relative rounded-[2rem] overflow-hidden transition-all duration-1000 ease-out ${isVisible ? 'max-w-full opacity-100' : 'max-w-0 opacity-0'}`} style={{ transitionDelay: `${i * 200}ms` }}>
+              <SafeImage src={src} alt={`Clinical Space ${i}`} width={800} height={600} className="w-full h-auto object-cover group-hover:scale-110 transition-transform duration-1000" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
           ))}
         </div>
       </div>
     </section>
   );
-}
+};
 
-function Process() {
+const ProductsStore = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="py-28 px-6 bg-secondary/5 relative overflow-hidden">
-      <div className="absolute top-1/2 left-0 w-full h-px bg-white/5 -z-10" />
-      <div className="max-w-6xl mx-auto">
-        <h2 className="font-heading text-5xl font-black text-white mb-20 text-center uppercase tracking-tighter italic">Vanguard Sourcing Protocol</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {BRIEF.process.map((step, i) => (
-            <div key={i} 
-              className={`relative pt-12 transition-all duration-1000 ${isVisible ? 'opacity-100 skew-y-0 translate-y-0' : 'opacity-0 skew-y-2 translate-y-8'}`}
-              style={{ transitionDelay: `${i * 150}ms` }}>
-              <span className="absolute top-0 left-0 text-7xl font-black text-primary/10 font-heading leading-none -z-10">{step.number}</span>
-              <div className="w-12 h-px bg-primary mb-6" />
-              <h3 className="text-white font-black text-xl mb-4 uppercase tracking-tight">{step.title}</h3>
-              <p className="text-white/50 text-sm leading-relaxed">{step.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Products() {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section id="products" ref={ref} className="py-28 px-6 bg-accent overflow-hidden">
+    <section ref={ref} id="pharmacy-store" className="py-28 px-6 bg-[#050505]">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-end mb-20">
-          <h2 className="font-heading text-6xl font-black text-white italic uppercase leading-none">The <span className="text-primary">Apothecary</span></h2>
-          <div className="hidden md:flex gap-4">
-             <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/30"><ChevronRight className="rotate-180" /></div>
-             <div className="w-12 h-12 rounded-full border border-primary/40 flex items-center justify-center text-primary"><ChevronRight /></div>
-          </div>
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-6">
+          <h2 className="font-heading text-6xl md:text-8xl font-black text-white leading-none">Pharmacy Store</h2>
+          <p className="text-white/40 max-w-xs text-lg md:text-right">Curated health and wellness products for a better life.</p>
         </div>
-
-        <div className="space-y-32">
-          {BRIEF.products.map((p, i) => (
-            <div key={i} className={`flex flex-col ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} items-center gap-12 md:gap-24 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'}`}>
-              <div className="w-full md:w-1/2 relative group">
-                <div className="aspect-[4/5] relative rounded-[3rem] overflow-hidden shadow-2xl border border-white/5 bg-secondary/5">
-                  <SafeImage src={p.image} alt={p.name} fill className="object-cover grayscale hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100" />
-                  <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-40 transition-opacity" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {products.map((p, i) => (
+            <div key={i} className={`group relative h-[450px] rounded-[3rem] overflow-hidden transition-all duration-700 ${isVisible ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`} style={{ transitionDelay: `${i * 150}ms` }}>
+              <SafeImage src={p.img} alt={p.name} fill className="object-cover opacity-50 group-hover:opacity-80 transition-all duration-1000 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-10 z-10">
+                <h3 className="text-4xl font-heading font-bold text-white mb-2">{p.name}</h3>
+                <div className="overflow-hidden transition-all duration-500 max-h-0 group-hover:max-h-32">
+                  <p className="text-white/50 text-lg mb-6 leading-relaxed">{p.description}</p>
                 </div>
-                <div className={`absolute -bottom-10 ${i % 2 === 0 ? '-right-10' : '-left-10'} w-1/2 h-1/2 bg-primary/20 rounded-full blur-[100px] -z-10`} />
-              </div>
-              <div className={`w-full md:w-1/2 ${i % 2 === 0 ? 'text-left' : 'md:text-right'}`}>
-                <span className="text-primary font-mono text-xs font-bold tracking-[0.5em] uppercase mb-4 block">Clinical Collection — 0{i + 1}</span>
-                <h3 className="font-heading text-4xl md:text-6xl font-black text-white leading-tight uppercase italic">{p.name}</h3>
-                <p className="text-white/50 mt-6 text-xl leading-relaxed font-light">{p.description}</p>
-                <div className="mt-10 flex flex-col gap-6">
-                  <span className="text-4xl font-black text-white tracking-tighter">{p.price}</span>
-                  <a href="#contact" className="bg-white text-black px-10 py-4 rounded-full font-black uppercase text-sm w-fit hover:bg-primary hover:text-white transition-all shadow-xl">
-                    Order Selection
-                  </a>
+                <div className="flex justify-between items-center mt-4">
+                  <span className="text-secondary font-black text-3xl">{p.price}</span>
+                  <a href="#contact" className="bg-white/10 backdrop-blur-md text-white px-8 py-3 rounded-full font-bold hover:bg-secondary hover:text-black transition-all">Order Now</a>
                 </div>
               </div>
             </div>
@@ -344,67 +292,28 @@ function Products() {
       </div>
     </section>
   );
-}
+};
 
-function About() {
+const Testimonials = () => {
   const { ref, isVisible } = useScrollReveal();
   return (
-    <section ref={ref} className="py-28 px-6 bg-secondary/5">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-20 items-center">
-        <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 -translate-x-0' : 'opacity-0 -translate-x-20'}`}>
-           <div className="relative">
-              <div className="aspect-square rounded-[4rem] overflow-hidden relative z-10 border border-white/10 shadow-2xl">
-                 <SafeImage src="https://images.unsplash.com/photo-1590650516494-0c8e4a4dd67e" alt="Welt Team" fill className="object-cover" />
+    <section ref={ref} className="py-28 px-6 bg-[#0a0a0a]">
+      <div className="max-w-4xl mx-auto text-center">
+        <h2 className="font-heading text-5xl font-black text-white mb-16">Patient Stories</h2>
+        <div className="space-y-12">
+          {testimonials.map((t, i) => (
+            <div key={i} className={`relative py-14 px-10 rounded-[3rem] border border-white/5 glass-panel transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-6 blur-sm'}`} style={{ transitionDelay: `${i * 200}ms` }}>
+              <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-secondary flex items-center justify-center">
+                <span className="text-black text-3xl font-black leading-none">“</span>
               </div>
-              <div className="absolute -top-10 -right-10 w-48 h-48 bg-primary/10 rounded-full blur-3xl" />
-              <div className="absolute -bottom-10 -left-10 w-64 h-64 border border-primary/20 rounded-[4rem] -z-10" />
-           </div>
-        </div>
-        <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'}`}>
-          <span className="text-primary font-mono text-xs tracking-[0.5em] uppercase mb-6 block">Our Heritage</span>
-          <h2 className="font-heading text-5xl font-black text-white mb-8 leading-none italic uppercase">Serving Rivers State with Precision.</h2>
-          <div className="space-y-6 text-white/50 text-lg leading-relaxed">
-            <p>Located on Aba Expressway, Welt Pharmacy serves as a beacon of health in Port Harcourt. We combine modern technology with traditional pharmaceutical care.</p>
-            <p>Our mandate is simple: ensure no patient goes without the treatment they need, no matter how specialized or rare the requirement may be.</p>
-          </div>
-          <div className="mt-12 grid grid-cols-2 gap-8 border-t border-white/10 pt-10">
-             <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary"><ShieldCheck size={24} /></div>
-                <span className="text-white font-bold uppercase text-xs tracking-widest">Verified Quality</span>
-             </div>
-             <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary"><Stethoscope size={24} /></div>
-                <span className="text-white font-bold uppercase text-xs tracking-widest">Expert Advice</span>
-             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Testimonials() {
-  const { ref, isVisible } = useScrollReveal();
-  return (
-    <section ref={ref} className="py-28 px-6 bg-accent">
-      <div className="max-w-7xl mx-auto">
-        <h2 className="font-heading text-5xl font-black text-white text-center mb-20 uppercase italic tracking-tighter">Patient Stories</h2>
-        <div className="columns-1 md:columns-3 gap-6 space-y-6">
-          {BRIEF.testimonials.map((t, i) => (
-            <div key={i} 
-              style={{ transitionDelay: `${i * 80}ms` }}
-              className={`break-inside-avoid bg-white/5 p-10 rounded-[2.5rem] border border-white/5 hover:border-primary/20 transition-all duration-700 group ${isVisible ? 'opacity-100 translate-y-0 blur-0' : 'opacity-0 translate-y-6 blur-sm'}`}>
-              <div className="flex gap-1 mb-8">
-                {[1,2,3,4,5].map(n => <div key={n} className="w-1.5 h-1.5 rounded-full bg-primary/50" />)}
-              </div>
-              <p className="text-white/70 text-lg leading-relaxed italic mb-10">&ldquo;{t.text}&rdquo;</p>
-              <div className="flex items-center gap-4 border-t border-white/5 pt-8">
-                <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center font-black text-black">
+              <p className="text-white/70 text-2xl md:text-3xl leading-snug font-medium italic">{t.text}</p>
+              <div className="mt-10 flex items-center justify-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center text-secondary font-black text-xl border border-secondary/20 uppercase">
                   {t.name.charAt(0)}
                 </div>
-                <div>
-                  <p className="font-bold text-white text-sm uppercase tracking-widest">{t.name}</p>
-                  <p className="text-primary text-[10px] font-mono uppercase mt-1">{t.role}</p>
+                <div className="text-left">
+                  <p className="font-bold text-white text-lg">{t.name}</p>
+                  <p className="text-white/40 text-sm uppercase tracking-widest">{t.role}</p>
                 </div>
               </div>
             </div>
@@ -413,10 +322,9 @@ function Testimonials() {
       </div>
     </section>
   );
-}
+};
 
-function Contact() {
-  const { ref, isVisible } = useScrollReveal();
+const ContactForm = () => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -427,138 +335,146 @@ function Contact() {
     setTimeout(() => { setLoading(false); setSent(true); }, 1500);
   };
 
-  return (
-    <section id="contact" ref={ref} className="py-28 px-6 bg-accent relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/5 -skew-x-12 translate-x-20 -z-0" />
-      <div className="max-w-7xl mx-auto relative z-10 grid md:grid-cols-2 gap-20 items-center">
-        <div className={`transition-all duration-1000 ${isVisible ? 'scale-100 opacity-100' : 'scale-90 opacity-0'}`}>
-          {sent ? (
-            <div className="flex flex-col items-center justify-center p-16 text-center animate-scaleIn bg-secondary/10 backdrop-blur-3xl rounded-[3rem] border border-white/10 shadow-2xl">
-              <div className="w-24 h-24 rounded-full bg-primary/20 flex items-center justify-center mb-8 border border-primary/40 relative z-10">
-                <CheckCheck size={40} className="text-primary" />
-              </div>
-              <h3 className="font-heading text-4xl font-black text-white mb-4 uppercase">Message Received</h3>
-              <p className="text-white/60 max-w-sm text-lg italic">Our pharmaceutical consultants will review your inquiry and respond via Port Harcourt hub shortly.</p>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4 bg-black/40 backdrop-blur-3xl p-10 md:p-14 rounded-[3rem] border border-white/10 shadow-2xl">
-              <h3 className="font-heading text-3xl font-black text-white mb-8 uppercase italic">Clinical Inquiry</h3>
-              <div className="space-y-4">
-                {(['name', 'email', 'phone'] as const).map(field => (
-                  <input
-                    key={field}
-                    type={field === 'email' ? 'email' : 'text'}
-                    placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-                    value={form[field]}
-                    onChange={e => setForm(prev => ({ ...prev, [field]: e.target.value }))}
-                    required={field !== 'phone'}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white placeholder-white/30 text-sm outline-none transition-all focus:border-primary/50"
-                  />
-                ))}
-                <textarea rows={4} placeholder="Requirement / Prescription details"
-                  value={form.message}
-                  onChange={e => setForm(prev => ({ ...prev, message: e.target.value }))}
-                  required
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white placeholder-white/30 text-sm outline-none resize-none transition-all focus:border-primary/50"
-                />
-              </div>
-              <button type="submit" disabled={loading}
-                className="w-full mt-8 bg-primary text-white py-5 rounded-2xl font-black text-base uppercase tracking-widest hover:brightness-110 transition-all disabled:opacity-60 flex justify-center items-center gap-3">
-                {loading ? <Loader2 className="animate-spin" /> : "Initiate Consultation"}
-              </button>
-            </form>
-          )}
+  if (sent) {
+    return (
+      <div className="flex flex-col items-center justify-center p-16 text-center animate-scaleIn bg-secondary/5 rounded-[3rem] border border-white/10">
+        <div className="w-24 h-24 rounded-full bg-secondary/20 flex items-center justify-center mb-8 border border-secondary/30">
+          <CheckCheck size={48} className="text-secondary" />
         </div>
-        <div className={`transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-20'}`}>
-          <h2 className="font-heading text-6xl md:text-7xl font-black text-white mb-10 leading-none uppercase italic tracking-tighter">Visit the <br /><span className="text-primary">Vanguard</span></h2>
+        <h3 className="font-heading text-4xl font-black text-white mb-4">Request Sent</h3>
+        <p className="text-white/50 max-w-sm text-lg">Thank you. Our specialists in Port Harcourt will review your inquiry and respond shortly.</p>
+        <button onClick={() => setSent(false)} className="mt-8 text-secondary font-bold hover:underline">Send another message</button>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6 glass-panel p-10 md:p-14 rounded-[3.5rem] relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-80 h-80 bg-secondary/10 blur-[100px] rounded-full pointer-events-none" />
+      <div className="relative z-10">
+        <h3 className="font-heading text-3xl font-bold text-white mb-10 uppercase tracking-tighter">Clinical Inquiry</h3>
+        <div className="space-y-5">
+          {(['name', 'email', 'phone'] as const).map(field => (
+            <input
+              key={field}
+              type={field === 'email' ? 'email' : 'text'}
+              placeholder={field.toUpperCase()}
+              value={form[field]}
+              onChange={e => setForm(prev => ({ ...prev, [field]: e.target.value }))}
+              required={field !== 'phone'}
+              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white placeholder-white/30 text-sm outline-none transition-all focus:bg-white/10 focus:border-secondary"
+            />
+          ))}
+          <textarea 
+            rows={4} 
+            placeholder="HOW CAN WE ASSIST YOU?"
+            value={form.message}
+            onChange={e => setForm(prev => ({ ...prev, message: e.target.value }))}
+            required
+            className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 text-white placeholder-white/30 text-sm outline-none resize-none transition-all focus:bg-white/10 focus:border-secondary"
+          />
+        </div>
+        <button type="submit" disabled={loading} className="w-full mt-10 bg-secondary text-black py-5 rounded-2xl font-black text-lg hover:brightness-110 transition-all disabled:opacity-60 flex justify-center items-center gap-3">
+          {loading ? <Loader2 className="animate-spin" /> : <>Send Inquiry <ArrowRight size={20} /></>}
+        </button>
+      </div>
+    </form>
+  );
+};
+
+const Contact = () => {
+  const { ref, isVisible } = useScrollReveal();
+  return (
+    <section id="contact" ref={ref} className="py-28 px-6 bg-[#050505]">
+      <div className="max-w-7xl mx-auto grid md:grid-cols-[1fr_1.4fr] gap-20 items-start">
+        <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}>
+          <h2 className="font-heading text-6xl md:text-8xl font-black text-white mb-10 leading-none">Get Expert Care.</h2>
+          <p className="text-white/40 text-xl leading-relaxed mb-12">
+            Professional healthcare at your fingertips. Sharp procurement, worldwide sourcing, and local delivery.
+          </p>
           <div className="space-y-8">
             <div className="flex items-start gap-6 group">
-              <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-all">
-                <MapPin size={24} />
+              <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 border border-white/10 group-hover:bg-secondary transition-all">
+                <Phone className="text-white group-hover:text-black" size={24} />
               </div>
               <div>
-                <p className="text-white font-bold uppercase text-xs tracking-[0.3em] mb-2">Location</p>
-                <p className="text-white/50 text-lg leading-relaxed max-w-sm">{BRIEF.contact.address}</p>
+                <p className="text-white/30 text-xs font-bold uppercase tracking-widest mb-1">WhatsApp Hotline</p>
+                <a href={`https://wa.me/${contact.whatsapp}`} className="text-xl font-bold text-white hover:text-secondary">+{contact.whatsapp}</a>
               </div>
             </div>
             <div className="flex items-start gap-6 group">
-              <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-all">
-                <Phone size={24} />
+              <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 border border-white/10 group-hover:bg-secondary transition-all">
+                <MapPin className="text-white group-hover:text-black" size={24} />
               </div>
               <div>
-                <p className="text-white font-bold uppercase text-xs tracking-[0.3em] mb-2">Pharmacy Hotline</p>
-                <p className="text-white/50 text-lg leading-relaxed">{BRIEF.contact.whatsapp}</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-6 group">
-              <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-black transition-all">
-                <Mail size={24} />
-              </div>
-              <div>
-                <p className="text-white font-bold uppercase text-xs tracking-[0.3em] mb-2">Dispatch Inquiries</p>
-                <p className="text-white/50 text-lg leading-relaxed">{BRIEF.contact.email}</p>
+                <p className="text-white/30 text-xs font-bold uppercase tracking-widest mb-1">Location</p>
+                <p className="text-lg font-medium text-white/70 max-w-xs">{contact.address}</p>
               </div>
             </div>
           </div>
         </div>
+        <ContactForm />
       </div>
     </section>
   );
-}
+};
 
-function Footer() {
-  return (
-    <footer className="bg-accent pt-28 pb-10 border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 bg-primary flex items-center justify-center rounded-lg font-black text-white text-2xl italic">W</div>
-              <span className="font-heading font-black text-3xl text-white tracking-tighter uppercase italic">Welt Pharma</span>
-            </div>
-            <p className="text-white/40 text-lg max-w-sm leading-relaxed mb-8">The Vanguard of Healthy Living. Sharp delivery, nationwide from our Port Harcourt hub.</p>
-            <div className="flex gap-6">
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary transition-all">
-                <span className="font-mono text-xs font-bold">IG</span>
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary transition-all">
-                <span className="font-mono text-xs font-bold">TW</span>
-              </a>
-              <a href="#" className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary transition-all">
-                <span className="font-mono text-xs font-bold">FB</span>
-              </a>
-            </div>
+const Footer = () => (
+  <footer className="bg-black border-t border-white/5 py-20 px-6">
+    <div className="max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-16 mb-20">
+        <div className="col-span-1 md:col-span-2">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-12 h-12 bg-secondary flex items-center justify-center rounded-xl font-black text-black text-xl">W</div>
+            <span className="font-heading font-black text-2xl tracking-tighter uppercase italic">Welt Pharma</span>
           </div>
-          
-          <div>
-            <h4 className="text-white font-black uppercase tracking-widest text-xs mb-8">Navigation</h4>
-            <ul className="space-y-4">
-              {['Home', 'Services', 'Products', 'Contact'].map(item => (
-                <li key={item}><a href={`#${item.toLowerCase()}`} className="text-white/30 hover:text-primary transition-colors text-sm uppercase font-bold tracking-widest">{item}</a></li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-black uppercase tracking-widest text-xs mb-8">Legal</h4>
-            <ul className="space-y-4">
-              {['Privacy Policy', 'Terms of Service', 'Dispatch Policy'].map(item => (
-                <li key={item}><a href="#" className="text-white/30 hover:text-primary transition-colors text-sm uppercase font-bold tracking-widest">{item}</a></li>
-              ))}
-            </ul>
+          <p className="text-white/40 text-lg max-w-sm leading-relaxed mb-8">
+            The vanguard of healthy living. 24-hour pharmaceutical excellence in Port Harcourt.
+          </p>
+          <div className="flex gap-4">
+             <a href={`https://instagram.com/${contact.instagram}`} className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/50 hover:bg-white hover:text-black transition-all">
+               <HeartPulse size={20} />
+             </a>
           </div>
         </div>
-
-        <div className="border-t border-white/5 pt-10 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-white/20 text-[10px] font-mono tracking-[0.2em] uppercase">
-            © {new Date().getFullYear()} Welt Pharmacy Ltd. All rights reserved clinical precision.
-          </p>
-          <div className="flex items-center gap-2">
-             <div className="w-2 h-2 rounded-full bg-green-500" />
-             <span className="text-white/30 text-[10px] font-mono tracking-[0.2em] uppercase italic">Hub Online — 24/7 Monitoring</span>
-          </div>
+        <div>
+          <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-8">Quick Links</h4>
+          <ul className="space-y-4">
+            {['Services', 'Pharmacy Store', 'About Us', 'Contact'].map(link => (
+              <li key={link}><a href={`#${link.toLowerCase().replace(' ', '-')}`} className="text-white/40 hover:text-secondary transition-colors">{link}</a></li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h4 className="text-white font-bold uppercase tracking-widest text-xs mb-8">Clinical Hours</h4>
+          <ul className="space-y-4 text-white/40">
+            <li className="flex justify-between"><span>Pharmacy</span> <span className="text-secondary font-bold">24/7</span></li>
+            <li className="flex justify-between"><span>Laboratory</span> <span className="text-white/60">6AM - 10PM</span></li>
+            <li className="flex justify-between"><span>Consultancy</span> <span className="text-white/60">9AM - 6PM</span></li>
+          </ul>
         </div>
       </div>
-    </footer>
+      <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-sm text-white/30">
+        <p>© {new Date().getFullYear()} Welt Pharmacy Ltd. All rights reserved.</p>
+        <p className="font-mono tracking-tighter">NIGERIA • PORT HARCOURT</p>
+      </div>
+    </div>
+  </footer>
+);
+
+export default function Page() {
+  return (
+    <main className="bg-black">
+      <Navbar />
+      <Hero />
+      <Features />
+      <DividerStats />
+      <GalleryMasonry />
+      <ProductsStore />
+      <Testimonials />
+      <Contact />
+      <Footer />
+    </main>
   );
 }
+// ===== END OF SITE =====
